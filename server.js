@@ -8,6 +8,13 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+const db = new sqlite3.Database('./db/election.db', err => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log('Connected to the election database.');
+  });
+
 // get all candidates
 app.get('/api/candidates', (req, res) => {
     const sql = `SELECT * FROM candidates`;
@@ -86,14 +93,6 @@ db.run(sql, params, function(err, result) {
 
   app.use((req, res) => {
     res.status(404).end();
-  });
-
-
-const db = new sqlite3.Database('./db/election.db', err => {
-    if (err) {
-      return console.error(err.message);
-    }
-    console.log('Connected to the election database.');
   });
 
 
